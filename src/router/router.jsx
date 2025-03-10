@@ -20,7 +20,6 @@ const MainRouter = () => {
                 />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Registration />} />
-                <Route path="/" element={<Registration />} />
                 <Route
                     path="/product/:id"
                     element={<Detail key={window.location.pathname} />}

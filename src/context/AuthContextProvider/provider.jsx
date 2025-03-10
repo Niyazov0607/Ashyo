@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { apiClient } from "../../config/apiConfig";
-import { login as authLogin } from "../../service/authService"; // Assuming you have a login function in authService
+import { login as authLogin } from "../../service/authService"; 
 
 const AuthContext = createContext({
     user: null,
@@ -22,13 +22,11 @@ export function AuthContextProvider({ children }) {
         return storedToken !== "null" ? storedToken : null;
     });
 
-    // Use localStorage to manage login status if needed
     const [loginStatus, setLoginStatus] = useState(() => {
-        return localStorage.getItem("login") === "true"; // Adjust this logic based on your needs
+        return localStorage.getItem("login") === "true"; 
     });
 
     useEffect(() => {
-        // Set Authorization header if token is available
         if (token) {
             apiClient.defaults.headers.common[
                 "Authorization"
@@ -37,7 +35,6 @@ export function AuthContextProvider({ children }) {
             delete apiClient.defaults.headers.common["Authorization"];
         }
 
-        // Persist user and token to localStorage
         if (user) {
             localStorage.setItem("user", JSON.stringify(user));
         } else {
@@ -50,7 +47,6 @@ export function AuthContextProvider({ children }) {
             localStorage.removeItem("token");
         }
 
-        // Persist login status if needed
         if (loginStatus) {
             localStorage.setItem("login", loginStatus.toString());
         } else {
@@ -58,18 +54,14 @@ export function AuthContextProvider({ children }) {
         }
     }, [user, token, loginStatus]);
 
-    // Login handler function
     const handleLogin = async (username, password) => {
         try {
             const response = await authLogin(username, password);
-            // Assuming the response contains user data and token
             const { userData, token: newToken } = response;
 
-            // Set user and token in the state
             setUser(userData);
             setToken(newToken);
 
-            // Update login status and store everything in localStorage
             setLoginStatus(true);
             localStorage.setItem("user", JSON.stringify(userData));
             localStorage.setItem("token", newToken);
@@ -92,7 +84,7 @@ export function AuthContextProvider({ children }) {
                 setToken,
                 loginStatus,
                 setLoginStatus,
-                handleLogin, // Providing the login function to be used in other components
+                handleLogin, 
             }}
         >
             {children}
